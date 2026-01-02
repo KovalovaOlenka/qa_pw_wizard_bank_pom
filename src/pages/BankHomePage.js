@@ -3,9 +3,7 @@ import { expect } from '@playwright/test';
 export class BankHomePage {
   constructor(page) {
     this.page = page;
-    this.customerLoginButton = page.getByRole('button', {
-      name: 'Customer Login',
-    });
+    this.customerLoginButton = page.getByRole('button', { name: 'Customer Login', });
   }
 
   async open() {
@@ -13,6 +11,7 @@ export class BankHomePage {
   }
 
   async clickCustomerLoginButton() {
+    await expect(this.customerLoginButton).toBeVisible();
     await this.customerLoginButton.click();
   }
 }
