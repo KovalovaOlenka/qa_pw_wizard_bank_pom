@@ -4,14 +4,22 @@ import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
 import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
+let firstName;
+let lastName;
+let postCode;
+
+
 test.beforeEach(async ({ page }) => {
   const addCustomerPage = new AddCustomerPage(page);
-  const firstName = faker.person.firstName();
-  const lastName = faker.person.lastName();
-  const postCode = faker.location.zipCode(); 
+
+  firstName = faker.person.firstName();
+  lastName = faker.person.lastName();
+  postCode = faker.location.zipCode();
+
   
 
   await addCustomerPage.open();
+  page.on('dialog', dialog => dialog.accept());
   await addCustomerPage.clickOnFirstNameField();
   await addCustomerPage.fillFirstNameField(firstName);
   await addCustomerPage.clickOnLastNameField();
@@ -30,15 +38,15 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Assert manager can delete customer', async ({ page }) => {
-  const bankManagerMainPage = new BankManagerMainPage(page);
   const customersList = new CustomersListPage(page);
 
-  await bankManagerMainPage.clickOnCustomersButton();
   await customersList.open();
-  await customersList.clickOnDeleteCustomerButton();
-  await customersList.verifyCustomerRowIsNotVisible();
+  page.once('dialog', dialog => dialog.accept());
+  await customersList.clickOnDeleteCustomerButton(firstName, lastName);
+  await customersList.verifyCustomerRowIsNotVisible(firstName, lastName);
   await page.reload();
-  await customersList.verifyCustomerRowIsNotVisible();
+  await customersList.verifyCustomerRowIsNotVisible(firstName, lastName);
+   
 
 
   /* 

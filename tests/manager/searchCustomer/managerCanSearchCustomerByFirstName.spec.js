@@ -29,6 +29,7 @@ test.beforeEach(async ({ page }) => {
   await addCustomerPage.fillLastNameField(lastName);
   await addCustomerPage.clickOnPostalCode();
   await addCustomerPage.fillPostalCodeField(postalCode);
+  page.on('dialog', dialog => dialog.accept());
   await addCustomerPage.clickOnAddCustomerButton();
 
 });

@@ -4,13 +4,17 @@ import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
 import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
 
+let firstName;
+let lastName;
+let postCode;
+
 
 test.beforeEach(async ({ page }) => {
 
   const addCustomerPage = new AddCustomerPage(page);
-  const firstName = faker.person.firstName();
-  const lastName = faker.person.lastName();
-  const postCode = faker.location.zipCode(); 
+  firstName = faker.person.firstName();
+  lastName = faker.person.lastName();
+  postCode = faker.location.zipCode(); 
 
   await addCustomerPage.open();
   await addCustomerPage.clickOnFirstNameField();
@@ -19,8 +23,9 @@ test.beforeEach(async ({ page }) => {
   await addCustomerPage.fillLastNameField(lastName);
   await addCustomerPage.clickOnPostalCode();
   await addCustomerPage.fillPostalCodeField(postCode);
+  page.on('dialog', dialog => dialog.accept());
   await addCustomerPage.clickOnAddCustomerButton();
-  await page.reload();
+ 
 
   /* 
   Pre-conditons:
@@ -33,16 +38,15 @@ test.beforeEach(async ({ page }) => {
   */
 });
 
-test('Assert manager can add new customer', async ({ page }) => {
+test('Assert manager can open account for a new customer', async ({ page }) => {
   const bankManagerMainPage = new BankManagerMainPage(page);
   const openAccountPage = new OpenAccountPage(page); 
   const addCustomerPage = new AddCustomerPage(page);
 
   await bankManagerMainPage.clickOnOpenAccountButton();
-  await openAccountPage.chooseCustomer('6');
+  await openAccountPage.chooseCustomer(`${firstName} ${lastName}`);
   await openAccountPage.chooseCurrency('Dollar');
   await openAccountPage.clickOnProcessButton();
-  await page.reload();
   await bankManagerMainPage.clickOnCustomersButton();
   await addCustomerPage.verifyAccountNumberInLastRowHasText();
 

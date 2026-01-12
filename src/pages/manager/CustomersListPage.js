@@ -3,7 +3,7 @@ import { expect } from '@playwright/test';
 export class CustomersListPage {
   constructor(page) {
     this.page = page;
-    this.deleteCustomer = page.getByRole('button');
+    this.deleteCustomer = page.getByRole('row').getByRole('button', { name: 'Delete' })
     this.customerRows = page.locator('tbody tr');
     this.searchField = page.getByPlaceholder('Search Customer');
     this.firstNameHeader = page.getByRole('link', { name: 'First Name' });
@@ -12,26 +12,27 @@ export class CustomersListPage {
   }
 
   async open() {
-    await this.page.goto('/angularJs-protractor/BankingProject/#/manager/list');
-  }
-  async clickOnDeleteCustomerButton() {
-    await this.customerRows.last().getByRole('button').click();
+  await this.page.goto('/angularJs-protractor/BankingProject/#/manager/list');
+    }
+  async clickOnDeleteCustomerButton(firstName, lastName) {
+  await this.page.locator('tbody tr', { hasText: `${firstName} ${lastName}` }).getByRole('button', { name: 'Delete' })
+    .click();
   }
   async verifyCustomerRowIsNotVisible(firstName, lastName) {
-  await expect(this.page.locator('tbody tr', { hasText: `${firstName} ${lastName}` })).toHaveCount(0);
-}
+  await expect(this.page.locator('tbody tr', { hasText: `${firstName} ${lastName}`,})).toHaveCount(0);
+  }
   async clickOnSearchField() {
   await this.searchField.click();
   }
   async fillFirstNameInSearchField(name) {
-    await this.searchField.fill(name);
+  await this.searchField.fill(name);
   }
   async verifyCustomerRowIsVisible(firstName, lastName) {
   await expect(this.page.locator('tbody tr', { hasText: `${firstName} ${lastName}` })).toHaveCount(1);
-}
+  }
   async verifyOnlyOneRowIsPresent() {
   await expect(this.customerRows).toHaveCount(1);
-}
+  }
   async fillLastNameInSearchField(name) {
   await this.searchField.fill(name);
   }
@@ -49,8 +50,8 @@ export class CustomersListPage {
   await this.firstNameHeader.click();
   const asc = await this.page.$$eval('tbody tr td:nth-child(1)',tds => tds.map(td => td.textContent.trim()));
   expect(asc).toEqual([...asc].sort());
-}
-async verifyLastNameSorting() {
+  }
+  async verifyLastNameSorting() {
   // Z → A
   await this.lastNameHeader.click();
   const desc = await this.page.$$eval('tbody tr td:nth-child(2)',tds => tds.map(td => td.textContent.trim()));
@@ -60,9 +61,9 @@ async verifyLastNameSorting() {
   await this.lastNameHeader.click();
   const asc = await this.page.$$eval('tbody tr td:nth-child(2)',tds => tds.map(td => td.textContent.trim()));
   expect(asc).toEqual([...asc].sort());
-}
+  }
 
-async verifyPostalCodeSorting() {
+  async verifyPostalCodeSorting() {
   // Z → A
   await this.postalCodeHeader.click();
   const desc = await this.page.$$eval('tbody tr td:nth-child(3)',tds => tds.map(td => td.textContent.trim()));
@@ -72,13 +73,13 @@ async verifyPostalCodeSorting() {
   await this.postalCodeHeader.click();
   const asc = await this.page.$$eval('tbody tr td:nth-child(3)',tds => tds.map(td => td.textContent.trim()));
   expect(asc).toEqual([...asc].sort());
-}
+  }
 // Check Header hovering and underline 
   async verifyUnderlineOnHover(element) {
   await element.hover();
 
   const textDecoration = await element.evaluate(el => window.getComputedStyle(el).textDecorationLine);
   expect(textDecoration).toContain('underline');
-}
+  }
 
 }
