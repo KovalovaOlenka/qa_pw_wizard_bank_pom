@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test';
+
 
 export class AddCustomerPage {
   constructor(page) {
@@ -8,7 +8,6 @@ export class AddCustomerPage {
     this.postalCodeField = page.getByPlaceholder('Post Code');
     this.addCustomerButton = page.getByRole('form').getByRole('button', { name: 'Add Customer' });
     this.customersButton = page.getByRole('button', { name: 'Customers' });
-    this.customerRows = page.locator('tbody tr');//звертаюсь до всієї таблиці
   }
 
   async open() {
@@ -37,20 +36,5 @@ export class AddCustomerPage {
   }
   async clickOnCustomersButton() {
     await this.customersButton.click();
-  }
-  async verifyFirstNameInLastRow(firstName) {
-  await expect(this.customerRows.last().getByRole('cell', { name: firstName })).toBeVisible();//тут беру останній рядок таблиці і перевіряю що ячейка містить потрібний елемент
-}
-  async verifyLastNameInLastRow(lastName) {
-  await expect(this.customerRows.last().getByRole('cell', { name: lastName })).toBeVisible();
-}
-  async verifyPostalCodeInLastRow(postCode) {
-    await expect(this.customerRows.last().getByRole('cell', { name: postCode })).toBeVisible();
-  }
-  async verifyNoAccountNumberInLastRow() {
-  await expect(this.customerRows.last().getByRole('cell').nth(3)).toHaveText('');
-}
-  async verifyAccountNumberInLastRowHasText() {
-    await expect(this.customerRows.last().getByRole('cell').nth(3)).toHaveText(/.+/);
   }
 }

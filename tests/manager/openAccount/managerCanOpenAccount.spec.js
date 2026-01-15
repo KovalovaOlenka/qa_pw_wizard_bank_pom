@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
 import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage';
 import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 let firstName;
 let lastName;
@@ -12,6 +13,7 @@ let postCode;
 test.beforeEach(async ({ page }) => {
 
   const addCustomerPage = new AddCustomerPage(page);
+  
   firstName = faker.person.firstName();
   lastName = faker.person.lastName();
   postCode = faker.location.zipCode(); 
@@ -41,14 +43,14 @@ test.beforeEach(async ({ page }) => {
 test('Assert manager can open account for a new customer', async ({ page }) => {
   const bankManagerMainPage = new BankManagerMainPage(page);
   const openAccountPage = new OpenAccountPage(page); 
-  const addCustomerPage = new AddCustomerPage(page);
+  const customersList = new CustomersListPage(page);
 
   await bankManagerMainPage.clickOnOpenAccountButton();
   await openAccountPage.chooseCustomer(`${firstName} ${lastName}`);
   await openAccountPage.chooseCurrency('Dollar');
   await openAccountPage.clickOnProcessButton();
   await bankManagerMainPage.clickOnCustomersButton();
-  await addCustomerPage.verifyAccountNumberInLastRowHasText();
+  await customersList.verifyAccountNumberInLastRowHasText();
 
 
   /* 

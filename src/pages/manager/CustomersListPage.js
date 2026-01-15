@@ -3,8 +3,7 @@ import { expect } from '@playwright/test';
 export class CustomersListPage {
   constructor(page) {
     this.page = page;
-    this.deleteCustomer = page.getByRole('row').getByRole('button', { name: 'Delete' })
-    this.customerRows = page.locator('tbody tr');
+    this.customerRows = page.locator('tbody tr');//звертаюсь до всієї таблиці
     this.searchField = page.getByPlaceholder('Search Customer');
     this.firstNameHeader = page.getByRole('link', { name: 'First Name' });
     this.lastNameHeader = page.getByRole('link', { name: 'Last Name' });
@@ -39,6 +38,24 @@ export class CustomersListPage {
   async fillPostalCodeInSearchField(code) {
   await this.searchField.fill(code);
   }
+  
+  async verifyFirstNameInLastRow(firstName) {
+  await expect(this.customerRows.last().getByRole('cell', { name: firstName })).toBeVisible();
+}
+  async verifyLastNameInLastRow(lastName) {
+  await expect(this.customerRows.last().getByRole('cell', { name: lastName })).toBeVisible();
+}
+  async verifyPostalCodeInLastRow(postCode) {
+  await expect(this.customerRows.last().getByRole('cell', { name: postCode })).toBeVisible();
+}
+  async verifyNoAccountNumberInLastRow() {
+  await expect(this.customerRows.last().getByRole('cell').nth(3)).toHaveText('');
+}
+  async verifyAccountNumberInLastRowHasText() {
+  await expect(this.customerRows.last().getByRole('cell').nth(3)).toHaveText(/.+/);
+}
+
+
   //Sorting customers
   async verifyFirstNameSorting() {
   // Z → A

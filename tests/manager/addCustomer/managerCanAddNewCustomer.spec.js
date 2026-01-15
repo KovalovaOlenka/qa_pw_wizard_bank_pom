@@ -1,9 +1,12 @@
 import { test } from '@playwright/test';
 import { faker } from '@faker-js/faker';
 import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage';
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage';
 
 test('Assert manager can add new customer', async ({ page }) => {
   const addCustomerPage = new AddCustomerPage(page);
+  const customersList = new CustomersListPage(page);
+
   const firstName = faker.person.firstName();
   const lastName = faker.person.lastName();
   const postCode = faker.location.zipCode(); 
@@ -18,10 +21,11 @@ test('Assert manager can add new customer', async ({ page }) => {
   page.on('dialog', dialog => dialog.accept());
   await addCustomerPage.clickOnAddCustomerButton();
   await addCustomerPage.clickOnCustomersButton();
-  await addCustomerPage.verifyFirstNameInLastRow(firstName);
-  await addCustomerPage.verifyLastNameInLastRow(lastName);
-  await addCustomerPage.verifyPostalCodeInLastRow(postCode);
-  await addCustomerPage.verifyNoAccountNumberInLastRow();
+  
+  await customersList.verifyFirstNameInLastRow(firstName);
+  await customersList.verifyLastNameInLastRow(lastName);
+  await customersList.verifyPostalCodeInLastRow(postCode);
+  await customersList.verifyNoAccountNumberInLastRow();
   /* 
   Test:
   1. Open add customer page by link  ✓https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager/addCust

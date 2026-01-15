@@ -15,8 +15,9 @@ export class OpenAccountPage {
     await this.currencySelect.selectOption({ label: currency });
   }
   async verifyDropdownHasCorrectValue(currency) {
-    await expect(this.currencySelect).toHaveValue(currency);
-  }
+  await expect(this.currencySelect.locator('option:checked')).toHaveText(currency);
+}
+  
   async chooseCustomer(user) {
     await this.customerSelect.selectOption(user);
   }
