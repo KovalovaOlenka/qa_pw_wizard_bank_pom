@@ -31,19 +31,19 @@ test.beforeEach(async ({ page }) => {
 
   await addCustomerPage.open(); 
   // Customer 1 
-  page.once('dialog', d => d.accept()); 
+  page.once('dialog', d => d.accept());
   await addCustomerPage.fillFirstNameField(customers[0].firstName); 
   await addCustomerPage.fillLastNameField(customers[0].lastName); 
   await addCustomerPage.fillPostalCodeField(customers[0].postCode); 
   await addCustomerPage.clickOnAddCustomerButton(); 
   // Customer 2 
-  page.once('dialog', d => d.accept()); 
+  page.once('dialog', d => d.accept());
   await addCustomerPage.fillFirstNameField(customers[1].firstName); 
   await addCustomerPage.fillLastNameField(customers[1].lastName); 
   await addCustomerPage.fillPostalCodeField(customers[1].postCode); 
   await addCustomerPage.clickOnAddCustomerButton(); 
   //Customer 3 
-  page.once('dialog', d => d.accept()); 
+  page.once('dialog', d => d.accept());
   await addCustomerPage.fillFirstNameField(customers[2].firstName); 
   await addCustomerPage.fillLastNameField(customers[2].lastName); 
   await addCustomerPage.fillPostalCodeField(customers[2].postCode);
@@ -66,21 +66,18 @@ test.beforeEach(async ({ page }) => {
   await customersList.open();
 
   // Delete customer 1
-  page.once('dialog', d => d.accept());
   await customersList.clickOnDeleteCustomerButton(
     customers[0].firstName,
     customers[0].lastName
   );
 
   // Delete customer 2
-  page.once('dialog', d => d.accept());
   await customersList.clickOnDeleteCustomerButton(
     customers[1].firstName,
     customers[1].lastName
   );
 
   // Delete customer 3
-  page.once('dialog', d => d.accept());
   await customersList.clickOnDeleteCustomerButton(
     customers[2].firstName,
     customers[2].lastName
